@@ -3,13 +3,37 @@
 #include <time.h>
 #include <omp.h>
 
-#define SIZE 50
+#define SIZE 5
+
+void multiply_matrices_parallelism_outer_loop(int A[SIZE][SIZE], int B[SIZE][SIZE], int num){
+  int multiply[SIZE][SIZE];
+  int i, o,c, d, k, sum = 0;
+  double time_spent;
+
+  clock_t begin = clock();//inicio da execução
+  #pragma omp parallel for num_threads(num)
+  for (c = 0; c < SIZE; c++) {
+    for (d = 0; d < SIZE; d++) {
+      for (k = 0; k < SIZE; k++) {
+        sum = sum + A[c][k]*B[k][d];
+      }
+
+      multiply[c][d] = sum;
+      sum = 0;
+    }
+  }
+
+  clock_t end = clock();
+  time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+  printf("\nTempo gasto com paralelização %d threads: %lf \n", num, time_spent);
+
+}
 
 
 int main()
 {
-    int random1[SIZE][SIZE];
-    int random2[SIZE][SIZE];
+    int A[SIZE][SIZE];
+    int B[SIZE][SIZE];
     int multiply[SIZE][SIZE];
     int i, o,c, d, k, sum = 0;
     double time_spent;
@@ -17,68 +41,51 @@ int main()
     srand(time(NULL));
 
 
-
+    //Matrix A
     for(o = 0; o<SIZE; o++)
     {   for(i = 0; i<SIZE; i++)
         {
-            random1[o][i] = rand()%15;
-            //printf("%d ", random1[o][i]);
+            A[o][i] = rand()%15;
         }
-        //printf("\n");
     }
 
-
+    //Matrix B
     for(o = 0; o<SIZE; o++)
     {   for(i = 0; i<SIZE; i++)
         {
-            random2[o][i] = rand()%15;
-            //printf("%d ", random2[o][i]);
+            B[o][i] = rand()%15;
         }
-        //printf("\n");
+
     }
     printf("\n");
 
-    //Sem paralelismo
-    clock_t begin = clock();//inicio da execução
+    //Do  A*B with no parallelism
+    clock_t begin = clock();
     for (c = 0; c < SIZE; c++) {
       for (d = 0; d < SIZE; d++) {
         for (k = 0; k < SIZE; k++) {
-          sum = sum + random1[c][k]*random2[k][d];
+          sum = sum + A[c][k]*B[k][d];
         }
 
         multiply[c][d] = sum;
-        //printf("%d ", multiply[c][d]);
+        printf("%d ", multiply[c][d]);
         sum = 0;
       }
-      //printf("\n");
+      printf("\n");
     }
     clock_t end = clock();
     time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
     printf("\nTempo gasto sem paralelização: %lf \n\n", time_spent);
 
-      //paralelismo threads = numero de cores da máquina
-      clock_t begin_1t = clock();//inicio da execução
-      #pragma omp parallel for
-      for (c = 0; c < SIZE; c++) {
-        for (d = 0; d < SIZE; d++) {
-          for (k = 0; k < SIZE; k++) {
-            sum = sum + random1[c][k]*random2[k][d];
-          }
-
-          multiply[c][d] = sum;
-          //printf("%d ", multiply[c][d]);
-          sum = 0;
-        }
-
-      //printf("\n");
-      }
-
-    clock_t end_1t = clock();
-    time_spent = (double)(end_1t - begin_1t) / CLOCKS_PER_SEC;
-    printf("\nTempo gasto com paralelização: %lf \n\n", time_spent);
-
-    return 0;
-
+    //outer loop parallelism
+    multiply_matrices_parallelism_outer_loop(A, B, 1);
+    multiply_matrices_parallelism_outer_loop(A, B, 2);
+    multiply_matrices_parallelism_outer_loop(A, B, 4);
+    multiply_matrices_parallelism_outer_loop(A, B, 8);
+    multiply_matrices_parallelism_outer_loop(A, B, 16);
+    multiply_matrices_parallelism_outer_loop(A, B, 32);
+    multiply_matrices_parallelism_outer_loop(A, B, 64);
+    multiply_matrices_parallelism_outer_loop(A, B, 128);
 
 
 
