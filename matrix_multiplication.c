@@ -99,7 +99,7 @@ int main()
         printf("\n");
     }
 
-    printf("\nMatriz B = \n\n");
+    printf("\n\nMatriz B = \n\n");
     //Matrix B
     for(o = 0; o<SIZE; o++)
     {   for(i = 0; i<SIZE; i++)
@@ -111,6 +111,7 @@ int main()
     }
     printf("\n");
 
+    printf("\n\nMatriz A*B = \n\n");
     //Do  A*B with no parallelism
     clock_t begin = clock();
     for (c = 0; c < SIZE; c++) {
@@ -129,41 +130,58 @@ int main()
     time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
     printf("\nTempo gasto sem paralelização: %lf \n\n", time_spent);
 
-    //outer loop parallelism
+
+    //1 thread parallelism
     multiply_matrices_parallelism_outer_loop(A, B, 1);
-    multiply_matrices_parallelism_outer_loop(A, B, 2);
-    multiply_matrices_parallelism_outer_loop(A, B, 4);
-    multiply_matrices_parallelism_outer_loop(A, B, 8);
-    multiply_matrices_parallelism_outer_loop(A, B, 16);
-    multiply_matrices_parallelism_outer_loop(A, B, 32);
-    multiply_matrices_parallelism_outer_loop(A, B, 64);
-    multiply_matrices_parallelism_outer_loop(A, B, 128);
-
-    printf("\n\n");
-
-    //Intermediate loop parallelism
     multiply_matrices_parallelism_intermediary_loop(A, B, 1);
-    multiply_matrices_parallelism_intermediary_loop(A, B, 2);
-    multiply_matrices_parallelism_intermediary_loop(A, B, 4);
-    multiply_matrices_parallelism_intermediary_loop(A, B, 8);
-    multiply_matrices_parallelism_intermediary_loop(A, B, 16);
-    multiply_matrices_parallelism_intermediary_loop(A, B, 32);
-    multiply_matrices_parallelism_intermediary_loop(A, B, 64);
-    multiply_matrices_parallelism_intermediary_loop(A, B, 128);
-
-    printf("\n\n");
-
-    //Intermediate loop parallelism
     multiply_matrices_parallelism_inner_loop(A, B, 1);
-    multiply_matrices_parallelism_inner_loop(A, B, 2);
-    multiply_matrices_parallelism_inner_loop(A, B, 4);
-    multiply_matrices_parallelism_inner_loop(A, B, 8);
-    multiply_matrices_parallelism_inner_loop(A, B, 16);
-    multiply_matrices_parallelism_inner_loop(A, B, 32);
-    multiply_matrices_parallelism_inner_loop(A, B, 64);
-    multiply_matrices_parallelism_inner_loop(A, B, 128);
-
     printf("\n\n");
+
+    //2 thread parallelism
+    multiply_matrices_parallelism_outer_loop(A, B, 2);
+    multiply_matrices_parallelism_intermediary_loop(A, B, 2);
+    multiply_matrices_parallelism_inner_loop(A, B, 1);
+    printf("\n\n");
+
+    //4 thread parallelism
+    multiply_matrices_parallelism_outer_loop(A, B, 4);
+    multiply_matrices_parallelism_intermediary_loop(A, B, 4);
+    multiply_matrices_parallelism_inner_loop(A, B, 4);
+    printf("\n\n");
+
+    //8 thread parallelism
+    multiply_matrices_parallelism_outer_loop(A, B, 8);
+    multiply_matrices_parallelism_intermediary_loop(A, B, 8);
+    multiply_matrices_parallelism_inner_loop(A, B, 8);
+    printf("\n\n");
+
+    //16 thread parallelism
+    multiply_matrices_parallelism_outer_loop(A, B, 16);
+    multiply_matrices_parallelism_intermediary_loop(A, B, 16);
+    multiply_matrices_parallelism_inner_loop(A, B, 16);
+    printf("\n\n");
+
+    //32 thread parallelism
+    multiply_matrices_parallelism_outer_loop(A, B, 32);
+    multiply_matrices_parallelism_intermediary_loop(A, B, 32);
+    multiply_matrices_parallelism_inner_loop(A, B, 32);
+    printf("\n\n");
+
+    //32 thread parallelism
+    multiply_matrices_parallelism_outer_loop(A, B, 64);
+    multiply_matrices_parallelism_intermediary_loop(A, B, 64);
+    multiply_matrices_parallelism_inner_loop(A, B, 64);
+    printf("\n\n");
+
+    //32 thread parallelism
+    multiply_matrices_parallelism_outer_loop(A, B, 128);
+    multiply_matrices_parallelism_intermediary_loop(A, B, 128);
+    multiply_matrices_parallelism_inner_loop(A, B, 128);
+    printf("\n\n");
+
+
+
+
 
 
 
